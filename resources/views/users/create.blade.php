@@ -23,6 +23,7 @@
              <label for="">名称</label>
              <input type="password" name="password_confirmation" class="form-control">
            </div>
+           {{csrf_field()}}
            <button type="submit" class="btn btn-primary">注册</button>
          </form>
        </div>
