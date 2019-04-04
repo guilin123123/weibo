@@ -21,7 +21,7 @@
              <input type="password" name="password" class="form-control">
            </div>
            <div class="form-group">
-             <label for="">名称</label>
+             <label for="">确认密码</label>
              <input type="password" name="password_confirmation" class="form-control">
            </div>
            {{csrf_field()}}
