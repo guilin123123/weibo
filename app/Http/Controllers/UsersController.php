@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class UsersController extends Controller
 {
@@ -45,7 +46,11 @@ class UsersController extends Controller
     public function update(User $user,Request $request)
     {
         $this->validate($request,[
-           'name' => 'required|max:50',
+           'name' => [
+               'required',
+               'max:50',
+               Rule::unique('users')->ignore($user->id),
+           ],
            'password' => 'nullable|confirmed|min:6',
         ]);
 
