@@ -18,4 +18,4 @@ Route::get('/signUp','UsersController@create')->name('signUp');
 Route::resource('/users','UsersController');
 Route::get('/login','SessionController@create')->name('login');
 Route::post('/login','SessionController@store')->name('login');
-Route::get('/logout','SessionController@destroy')->name('logout');
+Route::delete('/logout','SessionController@destroy')->name('logout');
