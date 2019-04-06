@@ -6,13 +6,14 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Mail;
 
 class UsersController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth',[
-            'except' => ['show','create','store','index']
+            'except' => ['show','create','store','index','confirmEmail']
         ]);
 
         $this->middleware('guest',[
@@ -50,9 +51,9 @@ class UsersController extends Controller
            'email' => $request->email,
         ]);
 
-        Auth::login($user);
-        session()->flash('success','注册成功,欢迎您的到来!');
-        return redirect()->route('users.show',[$user]);
+        $this->sendEmailConfirmTo($user);
+        session()->flash('success','注册成功!激活邮件已发送到邮箱,请注意查收');
+        return redirect('/');
     }
 
     public function edit(User $user)
@@ -91,5 +92,41 @@ class UsersController extends Controller
         $user->delete();
         session()->flash('success','成功删除该用户!');
         return back();
+    }
+
+    /**
+     * 发送邮件
+     * @param $user
+     */
+    protected function sendEmailConfirmTo($user)
+    {
+        $view = 'emails.confirm';
+        $data = compact('user');
+        $from = 'example@qq.com';
+        $name = 'guilin';
+        $to = $user->email;
+        $subject = '感谢注册,请确认邮箱';
+
+        Mail::send($view,$data,function($message) use ($from,$name,$to,$subject){
+            $message->from($from,$name)->to($to)->subject($subject);
+        });
+    }
+
+    /**
+     * 用户点击了激活邮件的链接处理
+     * @param $token
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function confirmEmail($token)
+    {
+        $user = User::where('activation_token',$token)->firstOrFail();
+
+        $user->activated = true;
+        $user->activation_token = null;
+        $user->save();
+
+        Auth::login($user);
+        session()->flash('success','恭喜你,激活成功!');
+        return redirect()->route('users.show',$user);
     }
 }
