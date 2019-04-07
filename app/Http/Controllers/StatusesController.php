@@ -16,7 +16,7 @@ class StatusesController extends Controller
 
     public function store(Request $request)
     {
-        $this->middleware($request,[
+        $this->validate($request,[
            'content' => 'required|max:140'
         ]);
 
