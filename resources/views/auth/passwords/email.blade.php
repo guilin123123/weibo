@@ -6,11 +6,6 @@
       <h5>密码重置</h5>
     </div>
     <div class="card-body">
-      @if(session('status'))
-      <div class="alert alert-success">
-        {{session('status')}}
-      </div>
-      @endif
       <form action="{{route('password.email')}}" method="post">
         <div class="form-group{{$errors->has('email') ? has-error : '' }}">
           <label for="email" class="form-control-label">邮箱</label>

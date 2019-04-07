@@ -10730,3 +10730,11 @@ section.user_info h1 {
   max_width: 100px;
 }
 
+/*password.reset*/
+
+.alert-status {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #3c763d;
+}
+
